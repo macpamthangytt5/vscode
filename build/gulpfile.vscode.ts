@@ -164,7 +164,8 @@ const coreCI = task.define('core-ci', task.series(
 		gulp.task('minify-vscode') as task.Task,
 		gulp.task('minify-vscode-reh') as task.Task,
 		gulp.task('minify-vscode-reh-web') as task.Task,
-	)
+	),
+	util.printV8HeapStats()
 ));
 gulp.task(coreCI);
 

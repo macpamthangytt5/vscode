@@ -9,6 +9,8 @@ import _filter from 'gulp-filter';
 import rename from 'gulp-rename';
 import path from 'path';
 import fs from 'fs';
+import * as os from 'os';
+import * as v8 from 'v8';
 import _rimraf from 'rimraf';
 import VinylFile from 'vinyl';
 import through from 'through';
@@ -428,4 +430,17 @@ export class VinylStat implements fs.Stats {
 	isSymbolicLink(): boolean { return false; }
 	isFIFO(): boolean { return false; }
 	isSocket(): boolean { return false; }
+}
+
+export function printV8HeapStats() {
+	const result = () => new Promise<void>((resolve, _) => {
+		console.log(`Constrained memory for ${process.pid} : ${process.constrainedMemory()} and ${process.availableMemory()}`);
+		const heapStats = v8.getHeapStatistics();
+		console.log(`Total OS memory: ${os.totalmem()}`);
+		console.log(`Free OS memory: ${os.freemem()}`);
+		console.log(`V8 heap stats: ${JSON.stringify(heapStats)}`);
+		resolve();
+	});
+	result.taskName = 'print-v8-heap-stats';
+	return result;
 }

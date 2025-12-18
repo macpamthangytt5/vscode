@@ -8,6 +8,7 @@ import path from 'path';
 import fs from 'fs';
 import * as task from './lib/task.ts';
 import { hygiene } from './hygiene.ts';
+import * as util from './lib/util.ts';
 
 const dirName = path.dirname(new URL(import.meta.url).pathname);
 
@@ -46,5 +47,5 @@ const checkPackageJSONTask = task.define('check-package-json', () => {
 });
 gulp.task(checkPackageJSONTask);
 
-const hygieneTask = task.define('hygiene', task.series(checkPackageJSONTask, () => hygiene(undefined, false)));
+const hygieneTask = task.define('hygiene', task.series(checkPackageJSONTask, () => hygiene(undefined, false), util.printV8HeapStats()));
 gulp.task(hygieneTask);

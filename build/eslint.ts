@@ -7,6 +7,7 @@ import eventStream from 'event-stream';
 import vfs from 'vinyl-fs';
 import { eslintFilter } from './filters.ts';
 import gulpEslint from './gulp-eslint.ts';
+import * as util from './lib/util.ts';
 
 function eslint(): NodeJS.ReadWriteStream {
 	return vfs
@@ -25,5 +26,8 @@ if (import.meta.main) {
 		console.error();
 		console.error(err);
 		process.exit(1);
+	}).on('end', async () => {
+		await util.printV8HeapStats()();
+		process.exit(0);
 	});
 }
